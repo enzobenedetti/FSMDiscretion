@@ -27,7 +27,6 @@ public class ScoreManager : MonoBehaviour
                 timer += Time.deltaTime;
                 if (timer >= timeScore)
                 {
-                    Debug.Log("Point !");
                     timer = 0f;
                     score += 10;
                 }

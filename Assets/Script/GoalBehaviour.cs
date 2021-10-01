@@ -37,7 +37,7 @@ public class GoalBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             ScoreManager.score += 100;
             agent.Warp(new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)));
