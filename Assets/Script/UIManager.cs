@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject GameOverGo;
     [SerializeField] private Text scoreTextInGame;
     [SerializeField] private Text scoreTextGameOver;
+    [SerializeField] private Text hSTextGameOver;
+    [SerializeField] private Text hSTextHome;
 
     // Update is called once per frame
     void Update()
@@ -21,6 +23,7 @@ public class UIManager : MonoBehaviour
                 HomeGo.SetActive(true);
                 InGameGo.SetActive(false);
                 GameOverGo.SetActive(false);
+                hSTextHome.text = ("High Score : " + ScoreManager.highScore);
                 break;
             case GameStatus.GameStateEnum.InGame:
                 HomeGo.SetActive(false);
@@ -33,6 +36,9 @@ public class UIManager : MonoBehaviour
                 InGameGo.SetActive(false);
                 GameOverGo.SetActive(true);
                 scoreTextGameOver.text = ("Score : " + ScoreManager.score);
+                if (ScoreManager.newHS)
+                    hSTextGameOver.text = ("New High Score !");
+                else hSTextGameOver.text = ("High Score : " + ScoreManager.highScore);
                 break;
         }
     }

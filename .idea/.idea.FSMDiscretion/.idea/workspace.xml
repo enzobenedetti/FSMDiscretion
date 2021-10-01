@@ -18,6 +18,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Script/ScoreManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/GameStatus.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Script/GoalBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="1ytkbsuHEaZcUTadMl9pZya2S6H" />
   <component name="ProjectViewState">
@@ -65,7 +66,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633078348794</updated>
-      <workItem from="1633078355494" duration="13225000" />
+      <workItem from="1633078355494" duration="15392000" />
     </task>
     <servers />
   </component>

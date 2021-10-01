@@ -7,6 +7,7 @@ public class ScoreManager : MonoBehaviour
     public static int score = 0;
 
     public static int highScore = 0;
+    public static bool newHS = false;
 
     private float timer = 0f;
 
@@ -20,6 +21,7 @@ public class ScoreManager : MonoBehaviour
         {
             case GameStatus.GameStateEnum.Home:
                 score = 0;
+                newHS = false;
                 break;
             case GameStatus.GameStateEnum.InGame:
                 timer += Time.deltaTime;
@@ -33,7 +35,10 @@ public class ScoreManager : MonoBehaviour
             case GameStatus.GameStateEnum.GameOver:
                 timer = 0f;
                 if (score > highScore)
+                {
                     highScore = score;
+                    newHS = true;
+                }
                 break;
         }
     }
