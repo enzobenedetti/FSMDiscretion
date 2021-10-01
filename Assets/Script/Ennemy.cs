@@ -57,7 +57,6 @@ public class Ennemy : MonoBehaviour
                         if (!PlayerDetected() && searchFailed) currentState = State.Idle;
                         break;
                 }
-                Debug.Log(currentState);
                 break;
             case GameStatus.GameStateEnum.GameOver:
                 if (agent.hasPath)
