@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,15 @@ using UnityEngine.AI;
 public class Ennemy : MonoBehaviour
 {
     public State currentState;
-
-    [SerializeField] private static float minX = -20f;
-    [SerializeField] private static float maxX = 20f;
-    [SerializeField] private static float minZ = -20f;
-    [SerializeField] private static float maxZ = 20f;
+    
+    private DetectPlayer _detectPlayer;
 
     [SerializeField] private NavMeshAgent agent;
+
+    private void Awake()
+    {
+        _detectPlayer = this.transform.GetComponent<DetectPlayer>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -21,24 +24,25 @@ public class Ennemy : MonoBehaviour
         { 
             case State.Idle:
                 Idle();
-                if (playerDetected()) currentState = State.Chase;
+                if (PlayerDetected()) currentState = State.Chase;
                 break;
             case State.Chase:
                 Chase();
-                if (!playerDetected()) currentState = State.Search;
+                if (!PlayerDetected()) currentState = State.Search;
                 break;
             case State.Search:
                 Search();
-                if (playerDetected()) currentState = State.Chase;
-                if (playerDetected()) currentState = State.Idle;
+                if (PlayerDetected()) currentState = State.Chase;
+                if (!PlayerDetected()) currentState = State.Idle;
                 break;
         }
+        if (PlayerDetected())
+            Debug.Log("Find Player");
     }
 
-    private bool playerDetected()
+    private bool PlayerDetected()
     {
-        //TODO
-        throw new System.NotImplementedException();
+        return _detectPlayer.IsPlayerDetected();
     }
 
     private void Search()
@@ -55,9 +59,7 @@ public class Ennemy : MonoBehaviour
     {
         if (!agent.pathPending && !agent.hasPath)
         {
-            agent.SetDestination(WayPoint.DefineWayPoint());
-            Debug.Log(agent.destination);
-            //new Vector3(Random.Range(minX, maxX), 0, Random.Range(minZ, maxZ))
+            agent.SetDestination(WayPoint.GiveMeWayPoint);
         }
     }
 }
