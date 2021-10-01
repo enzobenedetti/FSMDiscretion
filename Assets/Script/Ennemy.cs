@@ -7,8 +7,15 @@ using UnityEngine.AI;
 public class Ennemy : MonoBehaviour
 {
     public State currentState;
+    private bool chaseFailed = false;
+    private bool searchFailed = false;
+
+    private float timer = 0f;
+    [SerializeField] private float idleStopTime = 1f;
+    [SerializeField] private float searchTime = 5f;
     
     private DetectPlayer _detectPlayer;
+    [SerializeField] private Transform playerTransform;
 
     [SerializeField] private NavMeshAgent agent;
 
@@ -28,12 +35,12 @@ public class Ennemy : MonoBehaviour
                 break;
             case State.Chase:
                 Chase();
-                if (!PlayerDetected()) currentState = State.Search;
+                if (!PlayerDetected() && chaseFailed) currentState = State.Search;
                 break;
             case State.Search:
                 Search();
                 if (PlayerDetected()) currentState = State.Chase;
-                if (!PlayerDetected()) currentState = State.Idle;
+                if (!PlayerDetected() && searchFailed) currentState = State.Idle;
                 break;
         }
         if (PlayerDetected())
@@ -47,19 +54,40 @@ public class Ennemy : MonoBehaviour
 
     private void Search()
     {
-        //TODO
+        agent.speed = 2f;
+        timer += Time.deltaTime;
+        if (timer >= searchTime)
+        {
+            searchFailed = true;
+            timer = 0f;
+        }
+        else searchFailed = false;
     }
 
     private void Chase()
     {
-        //TODO
+        timer = 0f;
+        agent.speed = 4f;
+        if (!agent.pathPending && PlayerDetected())
+        {
+            agent.SetDestination(playerTransform.position);
+        }
+        if (!agent.hasPath)
+            chaseFailed = true;
+        else chaseFailed = false;
     }
 
     private void Idle()
     {
+        agent.speed = 2f;
         if (!agent.pathPending && !agent.hasPath)
         {
-            agent.SetDestination(WayPoint.GiveMeWayPoint);
+            timer += Time.deltaTime;
+            if (timer >= idleStopTime)
+            {
+                agent.SetDestination(WayPoint.GiveMeWayPoint);
+                timer = 0f;
+            }
         }
     }
 }
