@@ -34,7 +34,6 @@ public class DetectPlayer : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("Trigger" + gameObject.name);
         if (other.CompareTag("Player"))
         {
             RaycastHit hit;

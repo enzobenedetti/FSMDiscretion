@@ -19,32 +19,51 @@ public class Ennemy : MonoBehaviour
     [SerializeField] private Transform playerTransform;
 
     [SerializeField] private NavMeshAgent agent;
+    
+    private Vector3 _startSpawn;
+    private Quaternion _spawnRotation;
 
     private void Awake()
     {
         _detectPlayer = this.transform.GetComponent<DetectPlayer>();
+        _startSpawn = transform.position;
+        _spawnRotation = transform.rotation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (currentState)
-        { 
-            case State.Idle:
-                Idle();
-                if (PlayerDetected()) currentState = State.Chase;
+        switch (GameStatus.GameState)
+        {
+            case GameStatus.GameStateEnum.Home:
+                transform.position = _startSpawn;
+                transform.rotation = _spawnRotation;
+                currentState = State.Idle;
                 break;
-            case State.Chase:
-                Chase();
-                if (!PlayerDetected() && chaseFailed) currentState = State.Search;
+            case GameStatus.GameStateEnum.InGame:
+                switch (currentState)
+                { 
+                    case State.Idle:
+                        Idle();
+                        if (PlayerDetected()) currentState = State.Chase;
+                        break;
+                    case State.Chase:
+                        Chase();
+                        if (!PlayerDetected() && chaseFailed) currentState = State.Search;
+                        break;
+                    case State.Search:
+                        Search();
+                        if (PlayerDetected()) currentState = State.Chase;
+                        if (!PlayerDetected() && searchFailed) currentState = State.Idle;
+                        break;
+                }
+                Debug.Log(currentState);
                 break;
-            case State.Search:
-                Search();
-                if (PlayerDetected()) currentState = State.Chase;
-                if (!PlayerDetected() && searchFailed) currentState = State.Idle;
+            case GameStatus.GameStateEnum.GameOver:
+                if (agent.hasPath)
+                    agent.ResetPath();
                 break;
         }
-        Debug.Log(gameObject.name + currentState);
     }
 
     private bool PlayerDetected()
@@ -78,6 +97,10 @@ public class Ennemy : MonoBehaviour
         {
             agent.SetDestination(playerTransform.position);
         }
+
+        if (Vector3.Distance(transform.position, playerTransform.position) <= 1.5f)
+            GameStatus.GameState = GameStatus.GameStateEnum.GameOver;
+        
         if (!agent.hasPath)
             chaseFailed = true;
         else chaseFailed = false;

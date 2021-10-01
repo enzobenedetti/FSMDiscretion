@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,25 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speedBoost = 2f;
     [SerializeField] private float sneakingSpeed = 0.5f;
-    
-    // Update is called once per frame
+
+    private Vector3 _startSpawn;
+    private Quaternion _spawnRotation;
+
+    private void Awake()
+    {
+        _startSpawn = transform.position;
+        _spawnRotation = transform.rotation;
+    }
+
     void Update()
     {
-        Move();
+        if (GameStatus.GameState == GameStatus.GameStateEnum.InGame)
+            Move();
+        if (GameStatus.GameState == GameStatus.GameStateEnum.Home)
+        {
+            transform.position = _startSpawn;
+            transform.rotation = _spawnRotation;
+        }
     }
 
     private void Move()
