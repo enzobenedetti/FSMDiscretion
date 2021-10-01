@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Ennemy : MonoBehaviour
 {
@@ -55,6 +56,12 @@ public class Ennemy : MonoBehaviour
     {
         agent.speed = 2f;
         timer += Time.deltaTime;
+
+        if (!agent.hasPath)
+        {
+            agent.SetDestination(transform.position + new Vector3(Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f)));
+        }
+        
         if (timer >= searchTime)
         {
             searchFailed = true;
