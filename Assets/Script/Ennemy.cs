@@ -43,8 +43,7 @@ public class Ennemy : MonoBehaviour
                 if (!PlayerDetected() && searchFailed) currentState = State.Idle;
                 break;
         }
-        if (PlayerDetected())
-            Debug.Log("Find Player");
+        Debug.Log(gameObject.name + currentState);
     }
 
     private bool PlayerDetected()
@@ -68,7 +67,7 @@ public class Ennemy : MonoBehaviour
     {
         timer = 0f;
         agent.speed = 4f;
-        if (!agent.pathPending && PlayerDetected())
+        if (PlayerDetected())
         {
             agent.SetDestination(playerTransform.position);
         }

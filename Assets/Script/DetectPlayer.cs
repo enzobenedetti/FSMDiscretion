@@ -16,11 +16,29 @@ public class DetectPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger");
+        Debug.Log("Trigger" + gameObject.name);
         if (other.CompareTag("Player"))
         {
             RaycastHit hit;
-            if (Physics.Raycast(this.transform.position, 
+            if (Physics.Raycast(this.transform.position + Vector3.up, 
+                new Vector3(other.transform.position.x - transform.position.x, 0,other.transform.position.z - transform.position.z), 
+                out hit, checkDistance))
+            {
+                if (hit.transform == other.transform)
+                {
+                    _playerInZone = true;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("Trigger" + gameObject.name);
+        if (other.CompareTag("Player"))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(this.transform.position + Vector3.up, 
                 new Vector3(other.transform.position.x - transform.position.x, 0,other.transform.position.z - transform.position.z), 
                 out hit, checkDistance))
             {
